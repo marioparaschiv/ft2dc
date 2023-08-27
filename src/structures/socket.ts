@@ -20,19 +20,23 @@ export default class Socket extends WebSocket {
 
 	@bind
 	onMessage(event: WebSocket.MessageEvent): void {
-		const payload = JSON.parse(String(event));
-		if (!payload) return;
+		try {
+			const payload = JSON.parse(String(event));
+			if (!payload) return;
 
-		switch (payload.type) {
-			case PayloadTypes.PING:
-				this.logger.debug('(«) Ping.');
-				break;
-			case PayloadTypes.PONG:
-				this.logger.debug('(») Pong.');
-				break;
-			case PayloadTypes.RECEIVED_MESSAGE:
-				this.onFTMessage(payload);
-				break;
+			switch (payload.type) {
+				case PayloadTypes.PING:
+					this.logger.debug('(«) Ping.');
+					break;
+				case PayloadTypes.PONG:
+					this.logger.debug('(») Pong.');
+					break;
+				case PayloadTypes.RECEIVED_MESSAGE:
+					this.onFTMessage(payload);
+					break;
+			}
+		} catch (error) {
+			this.logger.error('Failed to parse message:', error);
 		}
 	};
 
