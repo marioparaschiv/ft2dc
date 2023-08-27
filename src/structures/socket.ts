@@ -1,0 +1,89 @@
+import { PayloadTypes, URL } from '@constants';
+import { createLogger } from '@lib/logger';
+import { bind, sleep } from '@utilities';
+import Webhook from '@lib/webhook';
+import config from '@config';
+import WebSocket from 'ws';
+import API from '@lib/api';
+
+export default class Socket extends WebSocket {
+	logger = createLogger('FT', 'WebSocket');
+
+	constructor() {
+		super(URL.WebSocket + '?authorization=' + config.auth);
+
+		this.on('message', this.onMessage);
+		this.on('error', this.onMessage);
+		this.on('open', this.onConnect);
+		this.on('close', this.onClose);
+	}
+
+	@bind
+	onMessage(event: WebSocket.MessageEvent): void {
+		const payload = JSON.parse(String(event));
+		if (!payload) return;
+
+		switch (payload.type) {
+			case PayloadTypes.PING:
+				this.logger.debug('(«) Ping.');
+				break;
+			case PayloadTypes.PONG:
+				this.logger.debug('(») Pong.');
+				break;
+			case PayloadTypes.RECEIVED_MESSAGE:
+				this.onFTMessage(payload);
+				break;
+		}
+	};
+
+	@bind
+	async onFTMessage(message: Message) {
+		this.logger.debug('Message received:', message.text);
+
+		if (!API.chats.find(chat => chat.chatRoomId === message.chatRoomId)) {
+			await API.getChats();
+		}
+
+		const chat = API.chats.find(chat => chat.chatRoomId === message.chatRoomId);
+
+		Webhook.send({
+			avatar_url: message.twitterPfpUrl,
+			username: `${message.twitterName} (from ${chat.username})`,
+			content: [
+				message.text.slice(1, -1),
+				message.imageUrls.length && '\n**Attachments:**',
+				message.imageUrls.map((img, index) => `[Image ${index + 1}](${img})`).join('\n')
+			].filter(Boolean).join('\n')
+		});
+	}
+
+	@bind
+	onConnect(): void {
+		this.logger.success('Connection successfully established.');
+		this.sendPing();
+	};
+
+	@bind
+	onClose(event: WebSocket.CloseEvent): void {
+		this.logger.warn('WebSocket connection terminated:', event);
+	};
+
+	@bind
+	onError(event: WebSocket.ErrorEvent): void {
+		this.logger.error('An error occured:', event.error);
+	};
+
+	@bind
+	transmit(payload: Record<any, any>) {
+		const json = JSON.stringify(payload);
+		return this.send(json);
+	}
+
+	async sendPing() {
+		this.transmit({ action: 'ping' });
+		this.logger.debug('(«) Ping.');
+
+		await sleep(2500);
+		this.sendPing();
+	}
+}

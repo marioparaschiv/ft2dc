@@ -1,0 +1,20 @@
+{
+	"name": "ft2dc",
+	"version": "1.0.0",
+	"description": "Forward messages from friends.tech to a Discord webhook.",
+	"main": "dist/index.js",
+	"author": "eternal (eternal.git@gmail.com)",
+	"license": "Unlicensed",
+	"scripts": {
+		"build": "swc src -d dist -D --delete-dir-on-start",
+		"start": "node dist/index.js"
+	},
+	"dependencies": {
+		"form-data": "^4.0.0",
+		"ws": "^8.13.0"
+	},
+	"devDependencies": {
+		"@types/ws": "^8.5.5",
+		"discord-api-types": "^0.37.55"
+	}
+}
