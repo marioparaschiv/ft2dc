@@ -11,6 +11,7 @@ export default class Socket extends WebSocket {
 
 	constructor() {
 		super(URL.WebSocket + '?authorization=' + config.auth);
+		this.logger.info('Attempting to establish connection...');
 
 		this.on('message', this.onMessage);
 		this.on('error', this.onMessage);
@@ -70,6 +71,9 @@ export default class Socket extends WebSocket {
 	@bind
 	onClose(event: WebSocket.CloseEvent): void {
 		this.logger.warn('WebSocket connection terminated:', event);
+		this.logger.info('WebSocket attempting reconnection...');
+
+		new Socket();
 	};
 
 	@bind
@@ -84,6 +88,8 @@ export default class Socket extends WebSocket {
 	}
 
 	async sendPing() {
+		if (this.readyState !== WebSocket.OPEN) return;
+
 		this.transmit({ action: 'ping' });
 		this.logger.debug('(«) Ping.');
 

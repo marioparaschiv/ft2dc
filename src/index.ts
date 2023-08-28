@@ -6,7 +6,7 @@ import { colorize } from '@utilities';
 const Logger = createLogger('FT');
 
 async function init() {
-	global.socket = new Socket();
+	new Socket();
 
 	const chats = await API.getChats();
 
