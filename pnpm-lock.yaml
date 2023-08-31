@@ -8,11 +8,17 @@ dependencies:
   form-data:
     specifier: ^4.0.0
     version: 4.0.0
+  mime-types:
+    specifier: ^2.1.35
+    version: 2.1.35
   ws:
     specifier: ^8.13.0
     version: 8.13.0
 
 devDependencies:
+  '@types/mime-types':
+    specifier: ^2.1.1
+    version: 2.1.1
   '@types/ws':
     specifier: ^8.5.5
     version: 8.5.5
@@ -21,6 +27,10 @@ devDependencies:
     version: 0.37.55
 
 packages:
+
+  /@types/mime-types@2.1.1:
+    resolution: {integrity: sha512-vXOTGVSLR2jMw440moWTC7H19iUyLtP3Z1YTj7cSsubOICinjMxFeb/V57v9QdyyPGbbWolUFSSmSiRSn94tFw==}
+    dev: true
 
   /@types/node@20.5.6:
     resolution: {integrity: sha512-Gi5wRGPbbyOTX+4Y2iULQ27oUPrefaB0PxGQJnfyWN3kvEDGM3mIB5M/gQLmitZf7A9FmLeaqxD3L1CXpm3VKQ==}

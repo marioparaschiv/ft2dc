@@ -1,10 +1,10 @@
+import { bind, getImage, sleep } from '@utilities';
 import { PayloadTypes, URL } from '@constants';
 import { createLogger } from '@lib/logger';
-import { bind, sleep } from '@utilities';
 import Webhook from '@lib/webhook';
 import config from '@config';
-import WebSocket from 'ws';
 import API from '@lib/api';
+import WebSocket from 'ws';
 
 export default class Socket extends WebSocket {
 	logger = createLogger('FT', 'WebSocket');
@@ -50,16 +50,18 @@ export default class Socket extends WebSocket {
 		}
 
 		const chat = API.chats.find(chat => chat.chatRoomId === message.chatRoomId);
+		const images = [];
+
+		for (const image of message.imageUrls) {
+			const buffer = await getImage(image);
+			images.push(buffer);
+		}
 
 		Webhook.send({
 			avatar_url: message.twitterPfpUrl,
 			username: `${message.twitterName} (from ${chat.username})`,
-			content: [
-				message.text.slice(1, -1),
-				message.imageUrls.length && '\n**Attachments:**',
-				message.imageUrls.map((img, index) => `[Image ${index + 1}](${img})`).join('\n')
-			].filter(Boolean).join('\n')
-		});
+			content: message.text.slice(1, -1)
+		}, images);
 	}
 
 	@bind
