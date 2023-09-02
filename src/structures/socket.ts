@@ -62,7 +62,7 @@ export default class Socket extends WebSocket {
 			username: `${message.twitterName} (from ${chat.username})`,
 			content: [
 				message.replyingToMessage && `**Replying to ${message.replyingToMessage.twitterName}**`,
-				message.replyingToMessage && `${message.replyingToMessage.text.slice(1, -1).split('\n').join('\n> ')}`,
+				message.replyingToMessage && `${message.replyingToMessage.text.slice(1, -1).split('\n').map(l => '\n> ' + l).join('')}`,
 				message.text.slice(1, -1)
 			].filter(Boolean).join('\n')
 		}, images);
