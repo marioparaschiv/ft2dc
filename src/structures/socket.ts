@@ -63,7 +63,7 @@ export default class Socket extends WebSocket {
 			content: [
 				message.replyingToMessage && `**Replying to ${message.replyingToMessage.twitterName}**`,
 				message.replyingToMessage && `${message.replyingToMessage.text.slice(1, -1)}`,
-				(message.replyingToMessage ? '>>> ' ? '') + message.text.slice(1, -1)
+				(message.replyingToMessage ? '>>> ' : '') + message.text.slice(1, -1)
 			].filter(Boolean).join('\n')
 		}, images);
 	}
