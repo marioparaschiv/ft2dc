@@ -57,12 +57,14 @@ export default class Socket extends WebSocket {
 			images.push(buffer);
 		}
 
+		const reply = message.replyingToMessage?.text.slice(1, -1);
+
 		Webhook.send({
 			avatar_url: message.twitterPfpUrl,
 			username: `${message.twitterName} (from ${chat.username})`,
 			content: [
-				message.replyingToMessage && `**Replying to ${message.replyingToMessage.twitterName}**`,
-				message.replyingToMessage && `${message.replyingToMessage.text.slice(1, -1).split('\n').map(l => '\n> ' + l).join('')}`,
+				reply && `**Replying to ${message.replyingToMessage.twitterName}**`,
+				reply && `${reply.split('\n').map(l => '> ' + l).join('\n')}`,
 				message.text.slice(1, -1)
 			].filter(Boolean).join('\n')
 		}, images);
