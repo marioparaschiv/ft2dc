@@ -7,6 +7,14 @@ declare interface Message {
 	messageId: number;
 	chatRoomId: string;
 	imageUrls: string[];
+	replyingToMessage: {
+		messageId: number;
+		sendingUserId: string;
+		text: string;
+		timestamp: number;
+		twitterName: string;
+		twitterPfpUrl: string;
+	};
 }
 
 declare interface Chat {
