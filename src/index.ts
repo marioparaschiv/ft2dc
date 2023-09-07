@@ -1,7 +1,7 @@
 import { createLogger } from '@lib/logger';
+import { colorize } from '@utilities';
 import { Socket } from '@structures';
 import API from '@lib/api';
-import { colorize } from '@utilities';
 
 const Logger = createLogger('FT');
 

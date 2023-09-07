@@ -62,11 +62,15 @@ export default class Socket extends WebSocket {
 		Webhook.send({
 			avatar_url: message.twitterPfpUrl,
 			username: `${message.twitterName} (from ${chat.username})`,
-			content: [
-				reply && `**Replying to ${message.replyingToMessage.twitterName}**`,
-				reply && `${reply.split('\n').map(l => '> ' + l).join('\n')}`,
-				message.text.slice(1, -1)
-			].filter(Boolean).join('\n')
+			embeds: [
+				{
+					description: [
+						reply && `**Replying to ${message.replyingToMessage.twitterName}**: \`${reply}\``,
+						reply && '',
+						message.text.slice(1, -1)
+					].filter(Boolean).join('\n')
+				}
+			]
 		}, images);
 	}
 
