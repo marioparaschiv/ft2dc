@@ -59,7 +59,35 @@ export default class Socket extends WebSocket {
 
 		const reply = message.replyingToMessage?.text.slice(1, -1);
 
-		Webhook.send({
+		Webhook.send(config.webhook, {
+			avatar_url: message.twitterPfpUrl,
+			username: `${message.twitterName} (from ${chat.username})`,
+			embeds: [
+				{
+					description: [
+						reply && `**Replying to ${message.replyingToMessage.twitterName}**: \`${reply}\``,
+						reply && '',
+						message.text.slice(1, -1)
+					].filter(Boolean).join('\n')
+				}
+			]
+		}, images);
+
+		const listener = config.listeners.find(listener => {
+			if (listener.room && listener.room !== message.chatRoomId) {
+				return false;
+			}
+
+			if (listener.users && !listener.users.includes(message.sendingUserId)) {
+				return false;
+			}
+
+			return true;
+		});
+
+		if (!listener) return;
+
+		Webhook.send(listener.webhook, {
 			avatar_url: message.twitterPfpUrl,
 			username: `${message.twitterName} (from ${chat.username})`,
 			embeds: [

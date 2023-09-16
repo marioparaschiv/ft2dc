@@ -2,17 +2,11 @@ import { RESTPostAPIWebhookWithTokenJSONBody } from 'discord-api-types/v10';
 import { createLogger } from '@lib/logger';
 import { Readable } from 'stream';
 import FormData from 'form-data';
-import config from '@config';
 
 class Webhook {
-	public url: string;
 	public logger = createLogger('Discord', 'Webhook');
 
-	constructor(url: string) {
-		this.url = url;
-	}
-
-	async send(message: RESTPostAPIWebhookWithTokenJSONBody, files?: { content: ArrayBuffer, extension: string; }[]) {
+	async send(url: string, message: RESTPostAPIWebhookWithTokenJSONBody, files?: { content: ArrayBuffer, extension: string; }[]) {
 		try {
 			const form = new FormData();
 
@@ -29,15 +23,15 @@ class Webhook {
 				}
 			}
 
-			form.submit(this.url, (err, res) => {
+			form.submit(url, (err, res) => {
 				if (err) throw err;
 
 				res.resume();
 			});
 		} catch (e) {
-			console.error('!!! Failed to send to webhook !!!\n', e, { url: this.url, message });
+			console.error('!!! Failed to send to webhook !!!\n', e, { url, message });
 		}
 	};
 }
 
-export default new Webhook(config.webhook);
+export default new Webhook();
