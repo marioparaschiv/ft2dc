@@ -16,14 +16,12 @@ class API {
 			});
 
 			if (!res?.ok) {
-				this.logger.error('Failed to retrieve profile information. Retrying in 500ms.', { res });
 				await sleep(500);
 				return this.getPortfolio();
 			}
 
 			return await res.json();
 		} catch (error) {
-			this.logger.error('Failed to retrieve profile information. Retrying in 500ms.', { error });
 			await sleep(500);
 			return this.getPortfolio();
 		}
