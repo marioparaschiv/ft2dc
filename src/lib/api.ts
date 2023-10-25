@@ -23,7 +23,9 @@ class API {
 
 	async getChats(): Promise<Chat[]> {
 		const portfolio = await this.getPortfolio();
+		this.logger.debug(portfolio);
 		const chats = portfolio.holdings;
+		this.logger.debug('Holdings:', chats);
 
 		this.chats = chats;
 		this.logger.success('Chats successfully updated.');
