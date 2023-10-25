@@ -2,5 +2,14 @@
 	"auth": "eyJhbGxxxxxxxxxxxNiIxxxxxxxxxnR5cCxxxxxxxxxxxxxCJ9.xxxxxxxxxxxxxxxxxxxxxxxxx",
 	"portfolio": "0x0000000000000000000",
 	"webhook": "https://canary.discord.com/api/webhooks/id/id",
+	"listeners": [
+		{
+			"room": "0x1111111111111111111111111111111111111111",
+			"users": [
+				"0x1111111111111111111111111111111111111111"
+			],
+			"webhook": "https://canary.discord.com/api/webhooks/xxx/xxx"
+		}
+	],
 	"debug": false
 }
