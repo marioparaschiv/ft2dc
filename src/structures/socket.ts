@@ -67,7 +67,7 @@ export default class Socket extends WebSocket {
 			]
 		}, images);
 
-		const listener = config.listeners.find(listener => {
+		const listener = config.listeners?.find(listener => {
 			if (listener.room && listener.room !== message.chatRoomId) {
 				return false;
 			}
