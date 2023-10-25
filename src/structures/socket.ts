@@ -37,7 +37,7 @@ export default class Socket extends WebSocket {
 
 	@bind
 	async onFTMessage(message: Message) {
-		this.logger.debug('Message received:', message.text);
+		// this.logger.debug('Message received:', message.text);
 
 		if (!API.chats || !API.chats.find(chat => chat.chatRoomId === message.chatRoomId)) {
 			await API.getChats();

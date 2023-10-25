@@ -27,6 +27,8 @@ class API {
 		const chats = portfolio.holdings;
 		this.logger.debug('Holdings:', chats);
 
+		if (!holdings) this.logger.warn('!!! GOT NO HOLDINGS !!! WTF???');
+
 		this.chats = chats;
 		this.logger.success('Chats successfully updated.');
 
