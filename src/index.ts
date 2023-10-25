@@ -1,3 +1,6 @@
+import sourcemaps from 'source-map-support';
+sourcemaps.install();
+
 import { createLogger } from '@lib/logger';
 import { colorize } from '@utilities';
 import { Socket } from '@structures';
