@@ -45,7 +45,7 @@ export default class Socket extends WebSocket {
 	async onFTMessage(message: Message) {
 		this.logger.debug('Message received:', message.text);
 
-		if (!API.chats.find(chat => chat.chatRoomId === message.chatRoomId)) {
+		if (!API.chats || !API.chats.find(chat => chat.chatRoomId === message.chatRoomId)) {
 			await API.getChats();
 		}
 
@@ -61,7 +61,7 @@ export default class Socket extends WebSocket {
 
 		Webhook.send(config.webhook, {
 			avatar_url: message.twitterPfpUrl,
-			username: `${message.twitterName} (from ${chat.username})`,
+			username: `${message.twitterName} (from ${chat?.username ?? message.chatRoomId === config.portfolio ? message.twitterName : 'Unknown'})`,
 			embeds: [
 				{
 					description: [
@@ -89,7 +89,7 @@ export default class Socket extends WebSocket {
 
 		Webhook.send(listener.webhook, {
 			avatar_url: message.twitterPfpUrl,
-			username: `${message.twitterName} (from ${chat.username})`,
+			username: `${message.twitterName} (from ${chat?.username ?? message.chatRoomId === config.portfolio ? message.twitterName : 'Unknown'})`,
 			embeds: [
 				{
 					description: [

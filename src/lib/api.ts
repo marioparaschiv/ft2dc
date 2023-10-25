@@ -28,7 +28,6 @@ class API {
 		this.chats = chats;
 		this.logger.success('Chats successfully updated.');
 
-
 		return this.chats;
 	}
 }
