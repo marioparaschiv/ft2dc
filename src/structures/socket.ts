@@ -25,7 +25,7 @@ export default class Socket extends WebSocket {
 			const payload = JSON.parse(String(event));
 			if (!payload) return;
 
-			switch (payload.type) { 
+			switch (payload.type) {
 				case PayloadTypes.RECEIVED_MESSAGE:
 					this.onFTMessage(payload);
 					break;
@@ -39,11 +39,11 @@ export default class Socket extends WebSocket {
 	async onFTMessage(message: Message) {
 		// this.logger.debug('Message received:', message.text);
 
-		if (!API.chats || !API.chats.find(chat => chat.chatRoomId === message.chatRoomId)) {
+		if (!API.chats?.find(chat => chat.chatRoomId === message.chatRoomId)) {
 			await API.getChats();
 		}
 
-		const chat = API.chats.find(chat => chat.chatRoomId === message.chatRoomId);
+		const chat = (API.chats ?? []).find(chat => chat.chatRoomId === message.chatRoomId);
 		const images = [];
 
 		for (const image of message.imageUrls) {
